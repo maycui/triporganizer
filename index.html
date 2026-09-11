@@ -571,14 +571,14 @@
     "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"same flight", date:"9/18", note:"Landing at LAX with Kevin Koh &amp; Willie &mdash; Car 2." },
     "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"PSP", note:"Picked up from PSP &mdash; Car 2." },
     "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"same flight", date:"9/18", note:"Driving the rental &mdash; Car 2 with Haijia, David, Willie &amp; Jerry." },
-    "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18" },
+    "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18", note:"Driving &mdash; Car 3 with Jeanie &amp; Jason." },
     "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
     "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"same flight", date:"9/18", note:"Landing at LAX with Kevin Koh &amp; Haijia &mdash; Car 2." },
     "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17", note:"Picked up in the LA area &mdash; Car 2." },
     "Ayesha":     { airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
-    "Jeanie":     {},
+    "Jeanie":     { note:"Riding with Anna &mdash; Car 3." },
     "Chelsea":    {},
-    "Jason":      {}
+    "Jason":      { note:"Riding with Anna &mdash; Car 3." }
   };
 
   var CARPOOLS = [
@@ -602,6 +602,12 @@
         "Jerry is picked up in the LA area.",
         "David is picked up from Palm Springs Airport on the way to the Airbnb."
       ]
+    },
+    {
+      label:"Car 3",
+      driver:"Anna",
+      passengers:["Jeanie","Jason"],
+      plan:[]
     }
   ];
 
@@ -731,8 +737,6 @@
         airportEl.className = "travel-arrival mono";
         airportEl.textContent = info.airport;
         row.appendChild(airportEl);
-      } else {
-        row.className += " no-data";
       }
 
       var noteEl = document.createElement("span");
@@ -745,6 +749,7 @@
         if (!hasArrival && !hasAirportOnly && info.flyIn) notes.push("flying in direct: " + info.flyIn.toLowerCase());
         if (info.flyOut) notes.push("flying out direct: " + info.flyOut.toLowerCase());
         noteEl.textContent = notes.length ? notes.join(" · ") : "no travel info yet";
+        if (!hasArrival && !hasAirportOnly && !notes.length) { row.className += " no-data"; }
       }
       row.appendChild(noteEl);
 
@@ -767,7 +772,7 @@
       fields.className = "carpool-fields";
       fields.innerHTML =
         "<div class='carpool-field'><span class='carpool-field-label'>Driver</span>" + group.driver + "</div>" +
-        "<div class='carpool-field'><span class='carpool-field-label'>Car</span>" + group.car + "</div>" +
+        (group.car ? "<div class='carpool-field'><span class='carpool-field-label'>Car</span>" + group.car + "</div>" : "") +
         "<div class='carpool-field'><span class='carpool-field-label'>Passengers</span>" + group.passengers.join(", ") + "</div>";
       card.appendChild(fields);
 
