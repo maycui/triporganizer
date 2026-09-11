@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Joshua Tree Retreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#EEE8DC;
+    --surface:#FBF8F1;
+    --surface-2:#E4DCC9;
+    --text:#2C2620;
+    --text-muted:#6E6455;
+    --accent:#A6456F;
+    --accent-ink:#7A2F52;
+    --accent-2:#5F7052;
+    --line:#D9CEB8;
+    --shadow: 0 1px 0 rgba(44,38,32,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15121D;
+      --surface:#1E1929;
+      --surface-2:#281F38;
+      --text:#EEE7DA;
+      --text-muted:#B2A6C4;
+      --accent:#E58FB3;
+      --accent-ink:#F3B4CE;
+      --accent-2:#93AC80;
+      --line:#38304C;
+      --shadow: 0 1px 0 rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15121D;
+    --surface:#1E1929;
+    --surface-2:#281F38;
+    --text:#EEE7DA;
+    --text-muted:#B2A6C4;
+    --accent:#E58FB3;
+    --accent-ink:#F3B4CE;
+    --accent-2:#93AC80;
+    --line:#38304C;
+    --shadow: 0 1px 0 rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Work Sans", ui-sans-serif, system-ui, sans-serif;
+    padding-inline:16px;
+    line-height:1.5;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+
+  .wrap{max-width:640px; margin-inline:auto;}
+
+  h1,h2,h3{
+    font-family:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    text-wrap:balance;
+    margin:0;
+  }
+  .eyebrow{
+    font-family:"Space Mono", ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    display:flex;
+    align-items:center;
+    gap:.5em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:.5em; height:.5em;
+    background:var(--accent);
+    display:inline-block;
+    border-radius:50%;
+  }
+  a{color:var(--accent-ink);}
+  .mono{font-family:"Space Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+
+  /* ---- top bar / nav ---- */
+  header.top{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    margin-inline:-16px;
+    padding-inline:16px;
+  }
+  .top-row{
+    max-width:640px; margin-inline:auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block:10px;
+  }
+  .wordmark{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700; font-size:1rem;
+    letter-spacing:.01em;
+  }
+  .wordmark span{color:var(--accent-ink);}
+  nav.chips{
+    display:flex; gap:8px;
+    overflow-x:auto;
+    padding-bottom:10px;
+    scrollbar-width:none;
+  }
+  nav.chips::-webkit-scrollbar{display:none;}
+  nav.chips a{
+    flex:none;
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--text-muted);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:100px;
+    background:var(--surface);
+  }
+  nav.chips a:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  /* ---- hero ---- */
+  .hero{padding-block:28px 8px;}
+  .hero-art{
+    width:100%; height:auto; display:block;
+    margin-bottom:18px;
+    border-radius:6px;
+    border:1px solid var(--line);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 11vw, 3.4rem);
+    font-weight:800;
+    line-height:.95;
+    margin-top:.4em;
+  }
+  .hero .sub{
+    color:var(--text-muted);
+    font-size:1.05rem;
+    max-width:34ch;
+    margin-top:.6em;
+  }
+  .stat-row{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:18px;
+  }
+  .stat{
+    border:1px solid var(--line);
+    background:var(--surface);
+    padding:8px 12px;
+    border-radius:4px;
+    font-family:"Space Mono", monospace;
+    font-size:.8rem;
+  }
+  .stat b{
+    display:block;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:1.15rem;
+    font-weight:700;
+    color:var(--text);
+  }
+
+  /* ---- sections / plaques ---- */
+  section{
+    margin-top:40px;
+    scroll-margin-top:78px;
+  }
+  .section-head{
+    display:flex; align-items:baseline; gap:10px;
+    margin-bottom:14px;
+    border-bottom:2px solid var(--text);
+    padding-bottom:8px;
+  }
+  .section-head h2{font-size:1.5rem; font-weight:700;}
+  .section-head .tag{
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    color:var(--text-muted);
+    margin-left:auto;
+  }
+  p.lede{color:var(--text-muted); margin:0 0 16px; max-width:56ch;}
+
+  .plaque{
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    padding:16px;
+    box-shadow:var(--shadow);
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--accent);
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:.92rem;
+    padding:11px 18px;
+    border-radius:4px;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn:focus-visible{outline:2px solid var(--text); outline-offset:2px;}
+  .btn.ghost{
+    background:transparent;
+    color:var(--accent-ink);
+    border:1px solid var(--accent-ink);
+  }
+  .btn.small{padding:6px 12px; font-size:.78rem;}
+
+  /* stay */
+  .stay-links{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  .room-note{
+    font-size:.85rem; color:var(--text-muted);
+    margin-top:14px;
+    border-left:3px solid var(--accent-2);
+    padding-left:10px;
+  }
+
+  #whoami{margin-top:22px;}
+  #whoami h3{font-size:1rem; margin-bottom:10px;}
+  .name-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(84px,1fr));
+    gap:8px;
+  }
+  .name-btn{
+    font-family:"Space Mono", monospace;
+    font-size:.78rem;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:8px 4px;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  .name-btn[aria-pressed="true"]{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .whoami-hint{font-size:.8rem; color:var(--text-muted); margin-top:10px;}
+
+  .rooms{
+    display:grid;
+    gap:12px;
+    margin-top:18px;
+  }
+  .room{
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    padding:14px;
+  }
+  .room-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .room-top h4{margin:0; font-family:"Bricolage Grotesque"; font-size:1.05rem;}
+  .room-cap{font-family:"Space Mono", monospace; font-size:.72rem; color:var(--text-muted); white-space:nowrap;}
+  .room-desc{font-size:.82rem; color:var(--text-muted); margin-top:2px;}
+  .occupants{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-top:10px; min-height:26px;
+  }
+  .occ-chip{
+    font-size:.78rem;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:3px 10px;
+  }
+  .occ-chip.empty{color:var(--text-muted); font-style:italic; border-style:dashed;}
+  .room-actions{margin-top:10px;}
+
+  .unclaimed{
+    margin-top:16px;
+    font-size:.85rem;
+    color:var(--text-muted);
+  }
+  .unclaimed b{color:var(--text);}
+
+  /* activities */
+  .stops{
+    display:grid;
+    gap:10px;
+  }
+  .stop{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    padding:12px 14px;
+    align-items:start;
+  }
+  .stop .num{
+    font-family:"Space Mono", monospace;
+    font-weight:700;
+    color:var(--accent-ink);
+    font-size:1.1rem;
+  }
+  .stop h4{margin:0 0 3px; font-family:"Bricolage Grotesque"; font-size:1.02rem;}
+  .stop p{margin:0; font-size:.85rem; color:var(--text-muted);}
+
+  /* travel */
+  .travel-body p{margin:0 0 10px; font-size:.94rem;}
+  .travel-body p:last-child{margin-bottom:0;}
+
+  footer{
+    margin-top:52px;
+    padding-block:26px 40px;
+    border-top:1px solid var(--line);
+    display:flex; flex-wrap:wrap;
+    gap:14px 22px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  footer .links{display:flex; gap:16px; flex-wrap:wrap;}
+  footer a{font-size:.85rem; text-decoration:none;}
+  footer .credit{font-family:"Space Mono", monospace; font-size:.72rem; color:var(--text-muted);}
+
+  @media (min-width:560px){
+    .rooms{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="top-row">
+      <div class="wordmark">joshua tree <span>&rsquo;26</span></div>
+      <div class="mono" style="font-size:.72rem; color:var(--text-muted);">9/18&ndash;9/24</div>
+    </div>
+    <nav class="chips" aria-label="Section navigation">
+      <a href="#stay">Stay</a>
+      <a href="#rooms">Rooms</a>
+      <a href="#travel">Getting there</a>
+      <a href="#do">Things to do</a>
+      <a href="#links">Links</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <svg class="hero-art" viewBox="0 0 640 260" role="img" aria-label="Desert horizon at dusk with Joshua trees">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--accent-ink)"/>
+            <stop offset="55%" stop-color="var(--accent)"/>
+            <stop offset="100%" stop-color="var(--surface-2)"/>
+          </linearGradient>
+        </defs>
+        <rect width="640" height="260" fill="url(#sky)"/>
+        <circle cx="500" cy="90" r="46" fill="var(--bg)" opacity="0.85"/>
+        <path d="M0 210 L60 180 L130 200 L210 175 L300 205 L390 182 L470 202 L560 178 L640 200 L640 260 L0 260 Z" fill="var(--surface-2)" opacity="0.9"/>
+        <path d="M0 235 L90 220 L180 238 L260 218 L350 240 L450 220 L540 238 L640 222 L640 260 L0 260 Z" fill="var(--bg)"/>
+        <!-- joshua trees -->
+        <g fill="var(--text)">
+          <g transform="translate(90,150)">
+            <rect x="-4" y="0" width="8" height="70" rx="3"/>
+            <rect x="-30" y="10" width="8" height="34" rx="3" transform="rotate(-35 -30 10)"/>
+            <rect x="22" y="18" width="8" height="30" rx="3" transform="rotate(35 22 18)"/>
+            <circle cx="0" cy="0" r="10"/>
+            <circle cx="-32" cy="6" r="7"/>
+            <circle cx="24" cy="14" r="7"/>
+          </g>
+          <g transform="translate(230,168) scale(0.8)">
+            <rect x="-4" y="0" width="8" height="70" rx="3"/>
+            <rect x="-28" y="14" width="8" height="30" rx="3" transform="rotate(-30 -28 14)"/>
+            <rect x="26" y="8" width="8" height="34" rx="3" transform="rotate(38 26 8)"/>
+            <circle cx="0" cy="0" r="10"/>
+            <circle cx="-30" cy="10" r="7"/>
+            <circle cx="28" cy="4" r="7"/>
+          </g>
+          <g transform="translate(540,160) scale(0.9)">
+            <rect x="-4" y="0" width="8" height="70" rx="3"/>
+            <rect x="-26" y="12" width="8" height="28" rx="3" transform="rotate(-32 -26 12)"/>
+            <rect x="24" y="16" width="8" height="30" rx="3" transform="rotate(34 24 16)"/>
+            <circle cx="0" cy="0" r="10"/>
+            <circle cx="-28" cy="8" r="7"/>
+            <circle cx="26" cy="12" r="7"/>
+          </g>
+        </g>
+      </svg>
+
+      <div class="eyebrow">Remote work retreat</div>
+      <h1>Joshua Tree</h1>
+      <p class="sub">Six days off the grid (with wifi). Trails by day, sunsets by evening, and the twelve of us under one roof.</p>
+
+      <div class="stat-row">
+        <div class="stat"><b>Sept 18&ndash;24</b>dates</div>
+        <div class="stat"><b>12</b>of us</div>
+        <div class="stat"><b>1</b>airbnb</div>
+      </div>
+    </section>
+
+    <section id="stay">
+      <div class="section-head"><h2>Where we're staying</h2><span class="tag">stay</span></div>
+      <div class="plaque">
+        <p class="lede" style="margin-bottom:0;">One house, twelve people. The Airbnb only works if all twelve of us are on it &mdash; see the room breakdown below and claim your bed.</p>
+        <div class="stay-links">
+          <a class="btn" href="https://www.airbnb.com/rooms/1665383794764971406" target="_blank" rel="noopener">Open the Airbnb listing</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms">
+      <div class="section-head"><h2>Rooms &amp; roommates</h2><span class="tag">tap to claim</span></div>
+      <p class="lede">Six sleeping setups, twelve people. Tap your name, then tap a room to claim your spot &mdash; updates live for everyone.</p>
+
+      <div id="whoami">
+        <h3>Who are you?</h3>
+        <div class="name-grid" id="nameGrid"></div>
+        <p class="whoami-hint" id="whoamiHint">Pick your name so the room below knows who's tapping.</p>
+      </div>
+
+      <div class="rooms" id="roomsGrid"></div>
+
+      <div class="unclaimed" id="unclaimedNote"></div>
+      <p class="room-note">Suite 2's second bed and the King Room are still up for grabs between the two Kevins &mdash; whoever claims first!</p>
+    </section>
+
+    <section id="travel">
+      <div class="section-head"><h2>Getting there</h2><span class="tag">travel</span></div>
+      <div class="plaque travel-body">
+        <p>Most of the crew is flying into <b>LAX</b> the morning of <b>Fri 9/18</b>, in a cluster of early flights between about 6:30 and 9am &mdash; a couple people are routing through PSP instead. Jerry's getting in the evening before, <span class="mono">9/17</span>.</p>
+        <p>On the way out, plans are spread wider: Willie heads back earliest on <span class="mono">9/24</span>, most of the house flies out around <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
+        <p>Not everyone's flying direct, and several of us are renting cars to shuttle people around &mdash; carpools are being sorted in the trip spreadsheet. If you haven't filled in your flights yet, that's the place to do it.</p>
+        <a class="btn ghost small" href="https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0" target="_blank" rel="noopener">Log your flight &amp; find a carpool &rarr;</a>
+      </div>
+    </section>
+
+    <section id="do">
+      <div class="section-head"><h2>Things to do</h2><span class="tag">5 stops</span></div>
+      <p class="lede">Nothing's mandatory &mdash; this is the loose list of what's around.</p>
+      <div class="stops">
+        <div class="stop"><div class="num">01</div><div><h4>Hidden Valley Nature Trail</h4><p>An easy loop through a boulder-ringed valley &mdash; good for a morning before it heats up.</p></div></div>
+        <div class="stop"><div class="num">02</div><div><h4>Cholla Cactus Garden at sunset</h4><p>The cactus spines light up gold in the evening light. Worth the drive out.</p></div></div>
+        <div class="stop"><div class="num">03</div><div><h4>Art sculptures</h4><p>Scattered outdoor installations around the area &mdash; a good half-day wander.</p></div></div>
+        <div class="stop"><div class="num">04</div><div><h4>Pioneertown</h4><p>Old-west film-set-turned-town, with Pappy &amp; Harriet's for food and music.</p></div></div>
+        <div class="stop"><div class="num">05</div><div><h4>Shooting range</h4><p>For whoever's up for it.</p></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="links">
+    <div class="links">
+      <a href="https://www.airbnb.com/rooms/1665383794764971406" target="_blank" rel="noopener">Airbnb listing</a>
+      <a href="https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0" target="_blank" rel="noopener">Trip spreadsheet</a>
+    </div>
+    <div class="credit">made for the crew &middot; sept 2026</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var ROSTER = ["Haijia","David","May","Kevin Kuo","Kevin Koh","Anna","Grayson","Willie","Richard","Jerry","Ayesha","Jeanie"];
+  var ROOMS = [
+    {id:"suite-1", label:"Suite 1", desc:"1 king, private bath", cap:2},
+    {id:"suite-2", label:"Suite 2", desc:"1 queen, private bath", cap:2},
+    {id:"king", label:"King Room", desc:"1 king bed", cap:2},
+    {id:"two-full", label:"Two Full Beds", desc:"2 full beds", cap:4},
+    {id:"bunk", label:"Bunk Room", desc:"4 beds", cap:4},
+    {id:"sofa", label:"Sleeper Sofa", desc:"living room pull-out", cap:2},
+  ];
+  var ROOM_LABEL = {};
+  ROOMS.forEach(function(r){ ROOM_LABEL[r.id] = r.label; });
+
+  function slug(name){ return name.toLowerCase().replace(/\s+/g,"-"); }
+
+  var nameGrid = document.getElementById("nameGrid");
+  var roomsGrid = document.getElementById("roomsGrid");
+  var unclaimedNote = document.getElementById("unclaimedNote");
+  var whoamiHint = document.getElementById("whoamiHint");
+
+  var me = null;
+  try { me = localStorage.getItem("jt-whoami"); } catch(e) {}
+
+  ROSTER.forEach(function(name){
+    var b = document.createElement("button");
+    b.className = "name-btn";
+    b.type = "button";
+    b.textContent = name;
+    b.setAttribute("aria-pressed", String(name === me));
+    b.addEventListener("click", function(){
+      me = name;
+      try { localStorage.setItem("jt-whoami", name); } catch(e) {}
+      Array.prototype.forEach.call(nameGrid.children, function(el){
+        el.setAttribute("aria-pressed", String(el.textContent === me));
+      });
+      whoamiHint.textContent = "You're " + me + " — tap a room below to claim your spot.";
+      render(lastData);
+    });
+    nameGrid.appendChild(b);
+  });
+  if (me) { whoamiHint.textContent = "You're " + me + " — tap a room below to claim your spot."; }
+
+  var lastData = {};
+
+  function render(data){
+    lastData = data || {};
+    roomsGrid.innerHTML = "";
+    var claimedNames = {};
+
+    ROOMS.forEach(function(room){
+      var occupants = ROSTER.filter(function(name){
+        var entry = lastData[slug(name)];
+        return entry && entry.room === room.id;
+      });
+      occupants.forEach(function(n){ claimedNames[n] = true; });
+
+      var card = document.createElement("div");
+      card.className = "room";
+
+      var top = document.createElement("div");
+      top.className = "room-top";
+      top.innerHTML = "<h4>" + room.label + "</h4><span class='room-cap mono'>" + occupants.length + " / " + room.cap + "</span>";
+      card.appendChild(top);
+
+      var desc = document.createElement("div");
+      desc.className = "room-desc";
+      desc.textContent = room.desc;
+      card.appendChild(desc);
+
+      var occDiv = document.createElement("div");
+      occDiv.className = "occupants";
+      if (occupants.length === 0) {
+        var empty = document.createElement("span");
+        empty.className = "occ-chip empty";
+        empty.textContent = "nobody yet";
+        occDiv.appendChild(empty);
+      } else {
+        occupants.forEach(function(n){
+          var chip = document.createElement("span");
+          chip.className = "occ-chip";
+          chip.textContent = n;
+          occDiv.appendChild(chip);
+        });
+      }
+      card.appendChild(occDiv);
+
+      var actions = document.createElement("div");
+      actions.className = "room-actions";
+      var mine = me && lastData[slug(me)] && lastData[slug(me)].room === room.id;
+      var actionBtn = document.createElement("button");
+      actionBtn.type = "button";
+      actionBtn.className = "btn small" + (mine ? " ghost" : "");
+      actionBtn.textContent = mine ? "Leave this room" : "Claim this bed";
+      actionBtn.disabled = !me;
+      actionBtn.addEventListener("click", function(){
+        if (!me) return;
+        claimRoom(mine ? null : room.id);
+      });
+      actions.appendChild(actionBtn);
+      card.appendChild(actions);
+
+      roomsGrid.appendChild(card);
+    });
+
+    var unclaimed = ROSTER.filter(function(n){ return !claimedNames[n]; });
+    unclaimedNote.innerHTML = unclaimed.length
+      ? "<b>Still deciding:</b> " + unclaimed.join(", ")
+      : "Everyone's got a bed — nice.";
+  }
+
+  render({});
+
+  var dbNS = null;
+  function claimRoom(roomId){
+    if (!me) return;
+    var body = { name: me, room: roomId };
+    if (dbNS) {
+      dbNS.collection("roster").doc(slug(me)).set(body).catch(function(){});
+    } else {
+      lastData[slug(me)] = body;
+      render(lastData);
+    }
+  }
+
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function(db){
+      if (!db) return;
+      dbNS = db;
+      db.collection("roster").onSnapshot(function(snap){
+        var data = {};
+        snap.docs.forEach(function(doc){
+          data[doc.id] = doc.data();
+        });
+        render(data);
+      });
+    }).catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>
