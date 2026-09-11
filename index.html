@@ -336,17 +336,31 @@
     text-transform:uppercase;
     color:var(--accent-ink);
   }
-  .carpool-members{
-    font-family:"Bricolage Grotesque", sans-serif;
-    font-weight:700;
-    font-size:1.05rem;
-    margin-top:4px;
+  .carpool-fields{
+    display:grid;
+    gap:6px;
+    margin-top:10px;
   }
-  .carpool-route{
+  .carpool-field{
+    font-size:.9rem;
+  }
+  .carpool-field-label{
+    display:inline-block;
+    min-width:6.5em;
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--text-muted);
+  }
+  .carpool-plan{
+    margin:12px 0 0;
+    padding-left:1.2em;
     font-size:.88rem;
     color:var(--text-muted);
-    margin-top:6px;
   }
+  .carpool-plan li{margin-top:4px;}
+  .carpool-plan li::marker{color:var(--accent-ink);}
   .travel-list{
     display:grid;
     gap:8px;
@@ -543,15 +557,15 @@
   // where the group has since confirmed actual carpool plans.
   var TRAVEL_INFO = {
     "May":        { driving:"No",              flyIn:"No",       flyOut:"No", note:"Riding with Kevin Kuo's carpool from Burbank." },
-    "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No", note:"Driving from Burbank, picking up Grayson &amp; Ayesha at PSP." },
+    "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No", note:"Driving from Burbank &mdash; picking up Grayson &amp; Ayesha at PSP." },
     "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
     "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
     "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:55am", date:"9/18" },
     "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18" },
-    "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"PSP", note:"Picked up by May &amp; Kevin Kuo's carpool." },
+    "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
     "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:30am", date:"9/18" },
     "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17" },
-    "Ayesha":     { airport:"PSP", note:"Picked up by May &amp; Kevin Kuo's carpool." },
+    "Ayesha":     { airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
     "Jeanie":     {},
     "Chelsea":    {},
     "Jason":      {}
@@ -560,8 +574,13 @@
   var CARPOOLS = [
     {
       label:"Car 1",
-      members:["May","Kevin Kuo"],
-      route:"Leaving from Burbank in their own car, picking up Grayson &amp; Ayesha at PSP on the way to the house."
+      driver:"Kevin Kuo",
+      car:"Personal car",
+      passengers:["May","Grayson","Ayesha"],
+      plan:[
+        "May and Kevin leave from Burbank.",
+        "Pick up Grayson and Ayesha from Palm Springs Airport after their 9pm arrival, on the way to the Airbnb."
+      ]
     }
   ];
 
@@ -723,15 +742,22 @@
       label.textContent = group.label;
       card.appendChild(label);
 
-      var members = document.createElement("div");
-      members.className = "carpool-members";
-      members.textContent = group.members.join(" & ");
-      card.appendChild(members);
+      var fields = document.createElement("div");
+      fields.className = "carpool-fields";
+      fields.innerHTML =
+        "<div class='carpool-field'><span class='carpool-field-label'>Driver</span>" + group.driver + "</div>" +
+        "<div class='carpool-field'><span class='carpool-field-label'>Car</span>" + group.car + "</div>" +
+        "<div class='carpool-field'><span class='carpool-field-label'>Passengers</span>" + group.passengers.join(", ") + "</div>";
+      card.appendChild(fields);
 
-      var route = document.createElement("div");
-      route.className = "carpool-route";
-      route.innerHTML = group.route;
-      card.appendChild(route);
+      var plan = document.createElement("ul");
+      plan.className = "carpool-plan";
+      group.plan.forEach(function(item){
+        var li = document.createElement("li");
+        li.textContent = item;
+        plan.appendChild(li);
+      });
+      card.appendChild(plan);
 
       carpoolList.appendChild(card);
     });
