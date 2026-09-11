@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: joshua-tree-trip
+    runtime: static
+    buildCommand: "echo 'no build needed'"
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
