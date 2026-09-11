@@ -144,25 +144,14 @@
     line-height:.95;
     margin-top:.4em;
   }
-  .stat-row{
-    display:flex; flex-wrap:wrap; gap:10px;
-    margin-top:18px;
-  }
-  .stat{
-    border:1px solid var(--line);
-    background:var(--surface);
-    padding:8px 12px;
-    border-radius:4px;
+  .hero-meta{
+    margin-top:10px;
     font-family:"Space Mono", monospace;
-    font-size:.8rem;
+    font-size:.85rem;
+    letter-spacing:.03em;
+    color:var(--text-muted);
   }
-  .stat b{
-    display:block;
-    font-family:"Bricolage Grotesque", sans-serif;
-    font-size:1.15rem;
-    font-weight:700;
-    color:var(--text);
-  }
+  .hero-meta span{margin-right:.9em;}
 
   /* ---- sections / plaques ---- */
   section{
@@ -415,12 +404,7 @@
 
       <div class="eyebrow">Remote work retreat</div>
       <h1>Joshua Tree</h1>
-
-      <div class="stat-row">
-        <div class="stat"><b>Sept 18&ndash;24</b>dates</div>
-        <div class="stat"><b>12</b>of us</div>
-        <div class="stat"><b>1</b>airbnb</div>
-      </div>
+      <p class="hero-meta"><span>Sept 18&ndash;24</span><span>12 of us</span></p>
     </section>
 
     <section id="you">
