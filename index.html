@@ -328,6 +328,15 @@
     margin-bottom:8px;
   }
   .subhead:first-of-type{margin-top:0;}
+  .travel-subhead{
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--text-muted);
+    margin:18px 0 8px;
+  }
+  .travel-subhead:first-of-type{margin-top:0;}
   .carpools{display:grid; gap:10px;}
   .carpool-card{
     border:1px solid var(--accent);
@@ -526,8 +535,12 @@
       <div class="carpools" id="returnCarpoolList"></div>
 
       <h3 class="subhead">Everyone's flights</h3>
-      <p class="lede">On the way out, Willie heads back earliest on <span class="mono">9/24</span>, most of the house on <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
-      <div class="travel-list" id="travelList"></div>
+
+      <h4 class="travel-subhead">Inbound</h4>
+      <div class="travel-list" id="inboundList"></div>
+
+      <h4 class="travel-subhead">Outbound</h4>
+      <div class="travel-list" id="outboundList"></div>
     </section>
 
     <section id="meals">
@@ -662,7 +675,8 @@
 
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
-  var travelList = document.getElementById("travelList");
+  var inboundList = document.getElementById("inboundList");
+  var outboundList = document.getElementById("outboundList");
   var carpoolList = document.getElementById("carpoolList");
   var returnCarpoolList = document.getElementById("returnCarpoolList");
   var whoamiHint = document.getElementById("whoamiHint");
@@ -768,8 +782,8 @@
     });
   }
 
-  function renderTravel(){
-    travelList.innerHTML = "";
+  function renderInbound(){
+    inboundList.innerHTML = "";
     ROSTER.forEach(function(name){
       var info = TRAVEL_INFO[name] || {};
       var row = document.createElement("div");
@@ -793,23 +807,41 @@
         airportEl.className = "travel-arrival mono";
         airportEl.textContent = info.airport;
         row.appendChild(airportEl);
+      } else {
+        var noteEl = document.createElement("span");
+        noteEl.className = "travel-note";
+        noteEl.textContent = (info.flyIn === "No") ? "Driving in — no flight" : "No flight info yet";
+        row.appendChild(noteEl);
+        row.className += " no-data";
       }
+
+      inboundList.appendChild(row);
+    });
+  }
+
+  function renderOutbound(){
+    outboundList.innerHTML = "";
+    ROSTER.forEach(function(name){
+      var info = TRAVEL_INFO[name] || {};
+      var row = document.createElement("div");
+      row.className = "travel-row";
+
+      var nameEl = document.createElement("div");
+      nameEl.className = "travel-name";
+      nameEl.textContent = name;
+      row.appendChild(nameEl);
 
       var noteEl = document.createElement("span");
       noteEl.className = "travel-note";
-      if (info.note) {
-        noteEl.innerHTML = info.note;
+      if (info.flyOut) {
+        noteEl.textContent = "Flying out: " + info.flyOut;
       } else {
-        var notes = [];
-        if (info.driving) notes.push("driving: " + info.driving.toLowerCase());
-        if (!hasArrival && !hasAirportOnly && info.flyIn) notes.push("flying in direct: " + info.flyIn.toLowerCase());
-        if (info.flyOut) notes.push("flying out direct: " + info.flyOut.toLowerCase());
-        noteEl.textContent = notes.length ? notes.join(" · ") : "no travel info yet";
-        if (!hasArrival && !hasAirportOnly && !notes.length) { row.className += " no-data"; }
+        noteEl.textContent = "No flight info yet";
+        row.className += " no-data";
       }
       row.appendChild(noteEl);
 
-      travelList.appendChild(row);
+      outboundList.appendChild(row);
     });
   }
 
@@ -851,7 +883,8 @@
   renderYouPanel();
   renderCarpools(CARPOOLS, carpoolList);
   renderCarpools(RETURN_CARPOOLS, returnCarpoolList);
-  renderTravel();
+  renderInbound();
+  renderOutbound();
 })();
 </script>
 </body>
