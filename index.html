@@ -315,8 +315,36 @@
   .stop p{margin:0; font-size:.85rem; color:var(--text-muted);}
 
   /* travel */
-  .travel-body p{margin:0 0 10px; font-size:.94rem;}
-  .travel-body p:last-child{margin-bottom:0;}
+  .travel-list{
+    display:grid;
+    gap:8px;
+    margin-top:18px;
+  }
+  .travel-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:6px 10px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    padding:10px 14px;
+  }
+  .travel-name{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:.95rem;
+    min-width:6.5em;
+  }
+  .travel-arrival{
+    font-size:.82rem;
+    color:var(--text);
+  }
+  .travel-note{
+    font-size:.78rem;
+    color:var(--text-muted);
+  }
+  .travel-row.no-data .travel-note{font-style:italic;}
 
   footer{
     margin-top:52px;
@@ -348,7 +376,7 @@
       <a href="#you">You</a>
       <a href="#stay">Stay</a>
       <a href="#rooms">Rooms</a>
-      <a href="#travel">Getting there</a>
+      <a href="#travel">In / Out</a>
       <a href="#do">Things to do</a>
       <a href="#links">Links</a>
     </nav>
@@ -428,13 +456,9 @@
     </section>
 
     <section id="travel">
-      <div class="section-head"><h2>Getting there</h2><span class="tag">travel</span></div>
-      <div class="plaque travel-body">
-        <p>Most of the crew is flying into <b>LAX</b> the morning of <b>Fri 9/18</b>, in a cluster of early flights between about 6:30 and 9am &mdash; a couple people are routing through PSP instead. Jerry's getting in the evening before, <span class="mono">9/17</span>.</p>
-        <p>On the way out, plans are spread wider: Willie heads back earliest on <span class="mono">9/24</span>, most of the house flies out around <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
-        <p>Not everyone's flying direct, and several of us are renting cars to shuttle people around &mdash; carpools are being sorted in the trip spreadsheet. If you haven't filled in your flights yet, that's the place to do it.</p>
-        <a class="btn ghost small" href="https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0" target="_blank" rel="noopener">Log your flight &amp; find a carpool &rarr;</a>
-      </div>
+      <div class="section-head"><h2>Getting In / Out</h2><span class="tag">travel</span></div>
+      <p class="lede">Who's flying in when, and who's driving. On the way out, Willie heads back earliest on <span class="mono">9/24</span>, most of the house on <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
+      <div class="travel-list" id="travelList"></div>
     </section>
 
     <section id="do">
@@ -499,6 +523,7 @@
 
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
+  var travelList = document.getElementById("travelList");
   var whoamiHint = document.getElementById("whoamiHint");
   var youPanel = document.getElementById("youPanel");
 
@@ -591,8 +616,45 @@
     });
   }
 
+  function renderTravel(){
+    travelList.innerHTML = "";
+    ROSTER.forEach(function(name){
+      var info = TRAVEL_INFO[name] || {};
+      var row = document.createElement("div");
+      row.className = "travel-row";
+
+      var nameEl = document.createElement("div");
+      nameEl.className = "travel-name";
+      nameEl.textContent = name;
+      row.appendChild(nameEl);
+
+      var hasArrival = info.airport && info.time && info.date;
+      var notes = [];
+      if (info.driving) notes.push("driving: " + info.driving.toLowerCase());
+      if (!hasArrival && info.flyIn) notes.push("flying in direct: " + info.flyIn.toLowerCase());
+      if (info.flyOut) notes.push("flying out direct: " + info.flyOut.toLowerCase());
+
+      if (hasArrival) {
+        var arrivalEl = document.createElement("span");
+        arrivalEl.className = "travel-arrival mono";
+        arrivalEl.textContent = info.airport + " · " + info.time + " · " + info.date;
+        row.appendChild(arrivalEl);
+      } else {
+        row.className += " no-data";
+      }
+
+      var noteEl = document.createElement("span");
+      noteEl.className = "travel-note";
+      noteEl.textContent = notes.length ? notes.join(" · ") : "no travel info yet";
+      row.appendChild(noteEl);
+
+      travelList.appendChild(row);
+    });
+  }
+
   renderRooms();
   renderYouPanel();
+  renderTravel();
 })();
 </script>
 </body>
