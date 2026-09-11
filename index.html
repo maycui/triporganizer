@@ -270,9 +270,7 @@
     border-color:var(--accent);
     box-shadow:0 0 0 1px var(--accent) inset;
   }
-  .room-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
   .room-top h4{margin:0; font-family:"Bricolage Grotesque"; font-size:1.05rem;}
-  .room-cap{font-family:"Space Mono", monospace; font-size:.72rem; color:var(--text-muted); white-space:nowrap;}
   .room-desc{font-size:.82rem; color:var(--text-muted); margin-top:2px;}
   .room-note-inline{
     font-size:.78rem;
@@ -292,16 +290,6 @@
     border-radius:100px;
     padding:3px 10px;
   }
-  .occ-chip.empty{color:var(--text-muted); font-style:italic; border-style:dashed;}
-  .room-actions{margin-top:10px;}
-
-  .unclaimed{
-    margin-top:16px;
-    font-size:.85rem;
-    color:var(--text-muted);
-  }
-  .unclaimed b{color:var(--text);}
-
   /* activities */
   .stops{
     display:grid;
@@ -425,7 +413,7 @@
     <section id="stay">
       <div class="section-head"><h2>Where we're staying</h2><span class="tag">stay</span></div>
       <div class="plaque">
-        <p class="lede" style="margin-bottom:0;">One house, twelve people. The Airbnb only works if all twelve of us are on it &mdash; see the room breakdown below and claim your bed.</p>
+        <p class="lede" style="margin-bottom:0;">One house, twelve people on the booking. See the room breakdown below for who's sleeping where.</p>
         <div class="stay-links">
           <a class="btn" href="https://www.airbnb.com/rooms/1665383794764971406" target="_blank" rel="noopener">Open the Airbnb listing</a>
         </div>
@@ -434,11 +422,9 @@
 
     <section id="rooms">
       <div class="section-head"><h2>Rooms &amp; roommates</h2><span class="tag">who's where</span></div>
-      <p class="lede">Here's who's in which room. Pick your name up top if anything about your spot changes &mdash; updates live for everyone.</p>
+      <p class="lede">Here's who's in which room. If anything needs to change, sort it out with the house and let whoever's keeping track know.</p>
 
       <div class="rooms" id="roomsGrid"></div>
-
-      <div class="unclaimed" id="unclaimedNote"></div>
     </section>
 
     <section id="travel">
@@ -478,15 +464,19 @@
 (function(){
   var ROSTER = ["Haijia","David","Chelsea","May","Kevin Kuo","Kevin Koh","Anna","Jeanie","Jason","Jerry","Willie","Ayesha","Grayson"];
   var ROOMS = [
-    {id:"suite-1", label:"Suite 1", desc:"1 king, private bath", cap:3, note:"David flies out Sep 20 &mdash; Chelsea takes over the room that night."},
-    {id:"suite-2", label:"Suite 2", desc:"1 queen, private bath", cap:2},
-    {id:"king", label:"King Room", desc:"1 king bed", cap:1},
-    {id:"two-full", label:"Two Full Beds", desc:"2 full beds", cap:4},
-    {id:"bunk", label:"Bunk Room", desc:"4 beds", cap:4},
-    {id:"sofa", label:"Sleeper Sofa", desc:"living room pull-out", cap:2},
+    {id:"suite-1", label:"Suite 1", desc:"1 king, private bath", occupants:["Haijia","David","Chelsea"], note:"David flies out Sep 20 &mdash; Chelsea takes over the room that night."},
+    {id:"suite-2", label:"Suite 2", desc:"1 queen, private bath", occupants:["May","Kevin Kuo"]},
+    {id:"king", label:"King Room", desc:"1 king bed", occupants:["Kevin Koh"]},
+    {id:"two-full", label:"Two Full Beds", desc:"2 full beds", occupants:["Anna","Jeanie","Jason"]},
+    {id:"bunk", label:"Bunk Room", desc:"4 beds", occupants:["Jerry","Willie","Ayesha"]},
+    {id:"sofa", label:"Sleeper Sofa", desc:"living room pull-out", occupants:["Grayson"]},
   ];
   var ROOM_LABEL = {};
-  ROOMS.forEach(function(r){ ROOM_LABEL[r.id] = r.label; });
+  var ROOM_OF = {};
+  ROOMS.forEach(function(r){
+    ROOM_LABEL[r.id] = r.label;
+    r.occupants.forEach(function(name){ ROOM_OF[name] = r.id; });
+  });
 
   // From the trip spreadsheet's "Answer These Questions" tab — only the
   // fields that were clearly legible. Blank/missing means that person
@@ -507,11 +497,8 @@
     "Jason":      {}
   };
 
-  function slug(name){ return name.toLowerCase().replace(/\s+/g,"-"); }
-
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
-  var unclaimedNote = document.getElementById("unclaimedNote");
   var whoamiHint = document.getElementById("whoamiHint");
   var youPanel = document.getElementById("youPanel");
 
@@ -522,10 +509,10 @@
     if (!me) { youPanel.hidden = true; return; }
     youPanel.hidden = false;
 
-    var myRoomId = lastData[slug(me)] && lastData[slug(me)].room;
+    var myRoomId = ROOM_OF[me];
     var roomLine = myRoomId
       ? "You're in <b>" + ROOM_LABEL[myRoomId] + "</b>."
-      : "You haven't claimed a room yet &mdash; jump to the <a href=\"#rooms\">rooms section</a>.";
+      : "No room on file for you yet.";
 
     var info = TRAVEL_INFO[me] || {};
     var facts = [];
@@ -558,34 +545,24 @@
       Array.prototype.forEach.call(nameGrid.children, function(el){
         el.setAttribute("aria-pressed", String(el.textContent === me));
       });
-      whoamiHint.textContent = "You're " + me + " — tap a room below to claim your spot.";
-      render(lastData);
+      whoamiHint.textContent = "You're " + me + ".";
+      renderYouPanel();
+      renderRooms();
     });
     nameGrid.appendChild(b);
   });
-  if (me) { whoamiHint.textContent = "You're " + me + " — tap a room below to claim your spot."; }
+  if (me) { whoamiHint.textContent = "You're " + me + "."; }
 
-  var lastData = {};
-
-  function render(data){
-    lastData = data || {};
+  function renderRooms(){
     roomsGrid.innerHTML = "";
-    var claimedNames = {};
-
     ROOMS.forEach(function(room){
-      var occupants = ROSTER.filter(function(name){
-        var entry = lastData[slug(name)];
-        return entry && entry.room === room.id;
-      });
-      occupants.forEach(function(n){ claimedNames[n] = true; });
-
-      var isMine = me && lastData[slug(me)] && lastData[slug(me)].room === room.id;
+      var isMine = me && ROOM_OF[me] === room.id;
       var card = document.createElement("div");
       card.className = "room" + (isMine ? " mine" : "");
 
       var top = document.createElement("div");
       top.className = "room-top";
-      top.innerHTML = "<h4>" + room.label + "</h4><span class='room-cap mono'>" + occupants.length + " / " + room.cap + "</span>";
+      top.innerHTML = "<h4>" + room.label + "</h4>";
       card.appendChild(top);
 
       var desc = document.createElement("div");
@@ -602,73 +579,20 @@
 
       var occDiv = document.createElement("div");
       occDiv.className = "occupants";
-      if (occupants.length === 0) {
-        var empty = document.createElement("span");
-        empty.className = "occ-chip empty";
-        empty.textContent = "nobody yet";
-        occDiv.appendChild(empty);
-      } else {
-        occupants.forEach(function(n){
-          var chip = document.createElement("span");
-          chip.className = "occ-chip";
-          chip.textContent = n;
-          occDiv.appendChild(chip);
-        });
-      }
-      card.appendChild(occDiv);
-
-      var actions = document.createElement("div");
-      actions.className = "room-actions";
-      var actionBtn = document.createElement("button");
-      actionBtn.type = "button";
-      actionBtn.className = "btn small" + (isMine ? " ghost" : "");
-      actionBtn.textContent = isMine ? "Leave this room" : "Claim this bed";
-      actionBtn.disabled = !me;
-      actionBtn.addEventListener("click", function(){
-        if (!me) return;
-        claimRoom(isMine ? null : room.id);
+      room.occupants.forEach(function(n){
+        var chip = document.createElement("span");
+        chip.className = "occ-chip";
+        chip.textContent = n;
+        occDiv.appendChild(chip);
       });
-      actions.appendChild(actionBtn);
-      card.appendChild(actions);
+      card.appendChild(occDiv);
 
       roomsGrid.appendChild(card);
     });
-
-    var unclaimed = ROSTER.filter(function(n){ return !claimedNames[n]; });
-    unclaimedNote.innerHTML = unclaimed.length
-      ? "<b>Still deciding:</b> " + unclaimed.join(", ")
-      : "Everyone's got a bed — nice.";
-
-    renderYouPanel();
   }
 
-  render({});
-
-  var dbNS = null;
-  function claimRoom(roomId){
-    if (!me) return;
-    var body = { name: me, room: roomId };
-    if (dbNS) {
-      dbNS.collection("roster").doc(slug(me)).set(body).catch(function(){});
-    } else {
-      lastData[slug(me)] = body;
-      render(lastData);
-    }
-  }
-
-  if (window.claude && typeof window.claude.use === "function") {
-    window.claude.use("db").then(function(db){
-      if (!db) return;
-      dbNS = db;
-      db.collection("roster").onSnapshot(function(snap){
-        var data = {};
-        snap.docs.forEach(function(doc){
-          data[doc.id] = doc.data();
-        });
-        render(data);
-      });
-    }).catch(function(){});
-  }
+  renderRooms();
+  renderYouPanel();
 })();
 </script>
 </body>
