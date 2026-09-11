@@ -315,6 +315,38 @@
   .stop p{margin:0; font-size:.85rem; color:var(--text-muted);}
 
   /* travel */
+  .subhead{
+    font-size:1rem;
+    font-weight:700;
+    margin-top:22px;
+    margin-bottom:8px;
+  }
+  .subhead:first-of-type{margin-top:0;}
+  .carpools{display:grid; gap:10px;}
+  .carpool-card{
+    border:1px solid var(--accent);
+    background:var(--surface);
+    border-radius:4px;
+    padding:14px 16px;
+  }
+  .carpool-label{
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+  }
+  .carpool-members{
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    margin-top:4px;
+  }
+  .carpool-route{
+    font-size:.88rem;
+    color:var(--text-muted);
+    margin-top:6px;
+  }
   .travel-list{
     display:grid;
     gap:8px;
@@ -457,7 +489,12 @@
 
     <section id="travel">
       <div class="section-head"><h2>Getting In / Out</h2><span class="tag">travel</span></div>
-      <p class="lede">Who's flying in when, and who's driving. On the way out, Willie heads back earliest on <span class="mono">9/24</span>, most of the house on <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
+
+      <h3 class="subhead">Carpool groups</h3>
+      <div class="carpools" id="carpoolList"></div>
+
+      <h3 class="subhead">Everyone's flights</h3>
+      <p class="lede">On the way out, Willie heads back earliest on <span class="mono">9/24</span>, most of the house on <span class="mono">9/27</span>, and Grayson stays latest through <span class="mono">9/28</span>.</p>
       <div class="travel-list" id="travelList"></div>
     </section>
 
@@ -502,28 +539,36 @@
     r.occupants.forEach(function(name){ ROOM_OF[name] = r.id; });
   });
 
-  // From the trip spreadsheet's "Answer These Questions" tab — only the
-  // fields that were clearly legible. Blank/missing means that person
-  // hasn't filled it in yet (or isn't in the sheet); check there directly.
+  // From the trip spreadsheet's "Answer These Questions" tab, corrected
+  // where the group has since confirmed actual carpool plans.
   var TRAVEL_INFO = {
-    "May":        { driving:"No",              flyIn:"No",       flyOut:"No" },
-    "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No" },
+    "May":        { driving:"No",              flyIn:"No",       flyOut:"No", note:"Riding with Kevin Kuo's carpool from Burbank." },
+    "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No", note:"Driving from Burbank, picking up Grayson &amp; Ayesha at PSP." },
     "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
     "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
     "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:55am", date:"9/18" },
     "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18" },
-    "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"8:53am", date:"9/18" },
+    "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"PSP", note:"Picked up by May &amp; Kevin Kuo's carpool." },
     "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:30am", date:"9/18" },
     "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17" },
-    "Ayesha":     {},
+    "Ayesha":     { airport:"PSP", note:"Picked up by May &amp; Kevin Kuo's carpool." },
     "Jeanie":     {},
     "Chelsea":    {},
     "Jason":      {}
   };
 
+  var CARPOOLS = [
+    {
+      label:"Car 1",
+      members:["May","Kevin Kuo"],
+      route:"Leaving from Burbank in their own car, picking up Grayson &amp; Ayesha at PSP on the way to the house."
+    }
+  ];
+
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
   var travelList = document.getElementById("travelList");
+  var carpoolList = document.getElementById("carpoolList");
   var whoamiHint = document.getElementById("whoamiHint");
   var youPanel = document.getElementById("youPanel");
 
@@ -544,7 +589,12 @@
     if (info.driving) facts.push("<span class='you-fact'><b>Driving/rental car:</b> " + info.driving + "</span>");
     if (info.flyIn) facts.push("<span class='you-fact'><b>Flying in direct:</b> " + info.flyIn + "</span>");
     if (info.flyOut) facts.push("<span class='you-fact'><b>Flying out direct:</b> " + info.flyOut + "</span>");
-    if (info.airport) facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + ", " + info.time + " on " + info.date + "</span>");
+    if (info.airport && info.time && info.date) {
+      facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + ", " + info.time + " on " + info.date + "</span>");
+    } else if (info.airport) {
+      facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + "</span>");
+    }
+    if (info.note) facts.push("<span class='you-fact'>" + info.note + "</span>");
 
     var missing = facts.length === 0
       ? "<p class='you-missing'>Nothing on file for you yet in the trip spreadsheet &mdash; " +
@@ -629,31 +679,67 @@
       row.appendChild(nameEl);
 
       var hasArrival = info.airport && info.time && info.date;
-      var notes = [];
-      if (info.driving) notes.push("driving: " + info.driving.toLowerCase());
-      if (!hasArrival && info.flyIn) notes.push("flying in direct: " + info.flyIn.toLowerCase());
-      if (info.flyOut) notes.push("flying out direct: " + info.flyOut.toLowerCase());
+      var hasAirportOnly = info.airport && !hasArrival;
 
       if (hasArrival) {
         var arrivalEl = document.createElement("span");
         arrivalEl.className = "travel-arrival mono";
         arrivalEl.textContent = info.airport + " · " + info.time + " · " + info.date;
         row.appendChild(arrivalEl);
+      } else if (hasAirportOnly) {
+        var airportEl = document.createElement("span");
+        airportEl.className = "travel-arrival mono";
+        airportEl.textContent = info.airport;
+        row.appendChild(airportEl);
       } else {
         row.className += " no-data";
       }
 
       var noteEl = document.createElement("span");
       noteEl.className = "travel-note";
-      noteEl.textContent = notes.length ? notes.join(" · ") : "no travel info yet";
+      if (info.note) {
+        noteEl.innerHTML = info.note;
+      } else {
+        var notes = [];
+        if (info.driving) notes.push("driving: " + info.driving.toLowerCase());
+        if (!hasArrival && !hasAirportOnly && info.flyIn) notes.push("flying in direct: " + info.flyIn.toLowerCase());
+        if (info.flyOut) notes.push("flying out direct: " + info.flyOut.toLowerCase());
+        noteEl.textContent = notes.length ? notes.join(" · ") : "no travel info yet";
+      }
       row.appendChild(noteEl);
 
       travelList.appendChild(row);
     });
   }
 
+  function renderCarpools(){
+    carpoolList.innerHTML = "";
+    CARPOOLS.forEach(function(group){
+      var card = document.createElement("div");
+      card.className = "carpool-card";
+
+      var label = document.createElement("div");
+      label.className = "carpool-label";
+      label.textContent = group.label;
+      card.appendChild(label);
+
+      var members = document.createElement("div");
+      members.className = "carpool-members";
+      members.textContent = group.members.join(" & ");
+      card.appendChild(members);
+
+      var route = document.createElement("div");
+      route.className = "carpool-route";
+      route.innerHTML = group.route;
+      card.appendChild(route);
+
+      carpoolList.appendChild(card);
+    });
+  }
+
   renderRooms();
   renderYouPanel();
+  renderCarpools();
   renderTravel();
 })();
 </script>
