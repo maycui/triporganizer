@@ -144,12 +144,6 @@
     line-height:.95;
     margin-top:.4em;
   }
-  .hero .sub{
-    color:var(--text-muted);
-    font-size:1.05rem;
-    max-width:34ch;
-    margin-top:.6em;
-  }
   .stat-row{
     display:flex; flex-wrap:wrap; gap:10px;
     margin-top:18px;
@@ -228,8 +222,6 @@
     padding-left:10px;
   }
 
-  #whoami{margin-top:22px;}
-  #whoami h3{font-size:1rem; margin-bottom:10px;}
   .name-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(84px,1fr));
@@ -252,6 +244,28 @@
   }
   .whoami-hint{font-size:.8rem; color:var(--text-muted); margin-top:10px;}
 
+  .you-panel{
+    margin-top:16px;
+    border:1px solid var(--accent);
+    background:var(--surface);
+    border-radius:4px;
+    padding:14px 16px;
+  }
+  .you-panel h3{font-size:1rem; margin-bottom:2px;}
+  .you-panel .you-missing{font-size:.85rem; color:var(--text-muted); margin-top:8px;}
+  .you-facts{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:10px;
+  }
+  .you-fact{
+    font-size:.78rem;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:4px 12px;
+  }
+  .you-fact b{font-weight:600;}
+
   .rooms{
     display:grid;
     gap:12px;
@@ -262,6 +276,10 @@
     background:var(--surface);
     border-radius:4px;
     padding:14px;
+  }
+  .room.mine{
+    border-color:var(--accent);
+    box-shadow:0 0 0 1px var(--accent) inset;
   }
   .room-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
   .room-top h4{margin:0; font-family:"Bricolage Grotesque"; font-size:1.05rem;}
@@ -343,6 +361,7 @@
       <div class="mono" style="font-size:.72rem; color:var(--text-muted);">9/18&ndash;9/24</div>
     </div>
     <nav class="chips" aria-label="Section navigation">
+      <a href="#you">You</a>
       <a href="#stay">Stay</a>
       <a href="#rooms">Rooms</a>
       <a href="#travel">Getting there</a>
@@ -396,13 +415,20 @@
 
       <div class="eyebrow">Remote work retreat</div>
       <h1>Joshua Tree</h1>
-      <p class="sub">Six days off the grid (with wifi). Trails by day, sunsets by evening, and the twelve of us under one roof.</p>
 
       <div class="stat-row">
         <div class="stat"><b>Sept 18&ndash;24</b>dates</div>
         <div class="stat"><b>12</b>of us</div>
         <div class="stat"><b>1</b>airbnb</div>
       </div>
+    </section>
+
+    <section id="you">
+      <div class="section-head"><h2>Who are you?</h2><span class="tag">start here</span></div>
+      <p class="lede">Pick your name and this page highlights what's yours &mdash; your room, and what's on file for your trip.</p>
+      <div class="name-grid" id="nameGrid"></div>
+      <p class="whoami-hint" id="whoamiHint">Tap your name above.</p>
+      <div class="you-panel" id="youPanel" hidden></div>
     </section>
 
     <section id="stay">
@@ -417,13 +443,7 @@
 
     <section id="rooms">
       <div class="section-head"><h2>Rooms &amp; roommates</h2><span class="tag">tap to claim</span></div>
-      <p class="lede">Six sleeping setups, twelve people. Tap your name, then tap a room to claim your spot &mdash; updates live for everyone.</p>
-
-      <div id="whoami">
-        <h3>Who are you?</h3>
-        <div class="name-grid" id="nameGrid"></div>
-        <p class="whoami-hint" id="whoamiHint">Pick your name so the room below knows who's tapping.</p>
-      </div>
+      <p class="lede">Six sleeping setups, twelve people. Pick your name up top, then tap a room to claim your spot &mdash; updates live for everyone.</p>
 
       <div class="rooms" id="roomsGrid"></div>
 
@@ -478,15 +498,62 @@
   var ROOM_LABEL = {};
   ROOMS.forEach(function(r){ ROOM_LABEL[r.id] = r.label; });
 
+  // From the trip spreadsheet's "Answer These Questions" tab — only the
+  // fields that were clearly legible. Blank/missing means that person
+  // hasn't filled it in yet (or isn't in the sheet); check there directly.
+  var TRAVEL_INFO = {
+    "May":        { driving:"No",              flyIn:"No",       flyOut:"No" },
+    "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No" },
+    "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
+    "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
+    "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:55am", date:"9/18" },
+    "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18" },
+    "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"8:53am", date:"9/18" },
+    "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:30am", date:"9/18" },
+    "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17" },
+    "Richard":    {},
+    "Ayesha":     {},
+    "Jeanie":     {}
+  };
+
   function slug(name){ return name.toLowerCase().replace(/\s+/g,"-"); }
 
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
   var unclaimedNote = document.getElementById("unclaimedNote");
   var whoamiHint = document.getElementById("whoamiHint");
+  var youPanel = document.getElementById("youPanel");
 
   var me = null;
   try { me = localStorage.getItem("jt-whoami"); } catch(e) {}
+
+  function renderYouPanel(){
+    if (!me) { youPanel.hidden = true; return; }
+    youPanel.hidden = false;
+
+    var myRoomId = lastData[slug(me)] && lastData[slug(me)].room;
+    var roomLine = myRoomId
+      ? "You're in <b>" + ROOM_LABEL[myRoomId] + "</b>."
+      : "You haven't claimed a room yet &mdash; jump to the <a href=\"#rooms\">rooms section</a>.";
+
+    var info = TRAVEL_INFO[me] || {};
+    var facts = [];
+    if (info.driving) facts.push("<span class='you-fact'><b>Driving/rental car:</b> " + info.driving + "</span>");
+    if (info.flyIn) facts.push("<span class='you-fact'><b>Flying in direct:</b> " + info.flyIn + "</span>");
+    if (info.flyOut) facts.push("<span class='you-fact'><b>Flying out direct:</b> " + info.flyOut + "</span>");
+    if (info.airport) facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + ", " + info.time + " on " + info.date + "</span>");
+
+    var missing = facts.length === 0
+      ? "<p class='you-missing'>Nothing on file for you yet in the trip spreadsheet &mdash; " +
+        "<a href='https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0' target='_blank' rel='noopener'>add your answers there</a>.</p>"
+      : "<p class='you-missing'>From the trip spreadsheet &mdash; double-check there if anything's changed.</p>";
+
+    youPanel.innerHTML =
+      "<h3>Hey " + me + "</h3>" +
+      "<p style='margin:0;'>" + roomLine + "</p>" +
+      (facts.length ? "<div class='you-facts'>" + facts.join("") + "</div>" : "") +
+      missing;
+  }
 
   ROSTER.forEach(function(name){
     var b = document.createElement("button");
@@ -521,8 +588,9 @@
       });
       occupants.forEach(function(n){ claimedNames[n] = true; });
 
+      var isMine = me && lastData[slug(me)] && lastData[slug(me)].room === room.id;
       var card = document.createElement("div");
-      card.className = "room";
+      card.className = "room" + (isMine ? " mine" : "");
 
       var top = document.createElement("div");
       top.className = "room-top";
@@ -553,15 +621,14 @@
 
       var actions = document.createElement("div");
       actions.className = "room-actions";
-      var mine = me && lastData[slug(me)] && lastData[slug(me)].room === room.id;
       var actionBtn = document.createElement("button");
       actionBtn.type = "button";
-      actionBtn.className = "btn small" + (mine ? " ghost" : "");
-      actionBtn.textContent = mine ? "Leave this room" : "Claim this bed";
+      actionBtn.className = "btn small" + (isMine ? " ghost" : "");
+      actionBtn.textContent = isMine ? "Leave this room" : "Claim this bed";
       actionBtn.disabled = !me;
       actionBtn.addEventListener("click", function(){
         if (!me) return;
-        claimRoom(mine ? null : room.id);
+        claimRoom(isMine ? null : room.id);
       });
       actions.appendChild(actionBtn);
       card.appendChild(actions);
@@ -573,6 +640,8 @@
     unclaimedNote.innerHTML = unclaimed.length
       ? "<b>Still deciding:</b> " + unclaimed.join(", ")
       : "Everyone's got a bed — nice.";
+
+    renderYouPanel();
   }
 
   render({});
