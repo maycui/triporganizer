@@ -639,8 +639,26 @@
   var RETURN_CARPOOLS = [
     {label:"Car 1", driver:"Kevin Kuo", car:"Personal car", passengers:["May"], plan:["May and Kevin drive back to Burbank."]},
     {label:"Car 2", driver:"Kevin Koh", car:"TBD", passengers:["TBD"], plan:[]},
-    {label:"Car 3", driver:"Anna", passengers:["Jeanie","Jason"], plan:["Anna, Jeanie, and Jason drive down to San Diego."]}
+    {label:"Car 3", driver:"Anna", passengers:["Jeanie","Jason"], plan:["Anna, Jeanie, and Jason drive down to San Diego."]},
+    {label:"Car 4", driver:"Uber", car:"Uber", passengers:["David"], plan:["David leaves around 1pm on Sunday."]}
   ];
+
+  function findCar(groups, name){
+    for (var i = 0; i < groups.length; i++) {
+      var g = groups[i];
+      if (g.driver === name || g.passengers.indexOf(name) !== -1) return g;
+    }
+    return null;
+  }
+
+  function carLine(group, name){
+    if (!group) return "TBD";
+    var role = group.driver === name ? " (driving)" : "";
+    var bits = ["Driver: " + group.driver];
+    if (group.car) bits.push("Car: " + group.car);
+    bits.push("Passengers: " + group.passengers.join(", "));
+    return group.label + role + " &mdash; " + bits.join(" &middot; ");
+  }
 
   var nameGrid = document.getElementById("nameGrid");
   var roomsGrid = document.getElementById("roomsGrid");
@@ -658,9 +676,16 @@
     youPanel.hidden = false;
 
     var myRoomId = ROOM_OF[me];
-    var roomLine = myRoomId
-      ? "You're in <b>" + ROOM_LABEL[myRoomId] + "</b>."
-      : "No room on file for you yet.";
+    var roomValue = myRoomId ? ROOM_LABEL[myRoomId] : "No room on file yet";
+    var carInValue = carLine(findCar(CARPOOLS, me), me);
+    var carOutValue = carLine(findCar(RETURN_CARPOOLS, me), me);
+
+    var fields =
+      "<div class='carpool-fields'>" +
+      "<div class='carpool-field'><span class='carpool-field-label'>Room</span>" + roomValue + "</div>" +
+      "<div class='carpool-field'><span class='carpool-field-label'>Car &middot; Coming In</span>" + carInValue + "</div>" +
+      "<div class='carpool-field'><span class='carpool-field-label'>Car &middot; Leaving</span>" + carOutValue + "</div>" +
+      "</div>";
 
     var info = TRAVEL_INFO[me] || {};
     var facts = [];
@@ -672,16 +697,15 @@
     } else if (info.airport) {
       facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + "</span>");
     }
-    if (info.note) facts.push("<span class='you-fact'>" + info.note + "</span>");
 
-    var missing = facts.length === 0
+    var missing = (facts.length === 0 && !myRoomId)
       ? "<p class='you-missing'>Nothing on file for you yet in the trip spreadsheet &mdash; " +
         "<a href='https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0' target='_blank' rel='noopener'>add your answers there</a>.</p>"
       : "<p class='you-missing'>From the trip spreadsheet &mdash; double-check there if anything's changed.</p>";
 
     youPanel.innerHTML =
       "<h3>Hey " + me + "</h3>" +
-      "<p style='margin:0;'>" + roomLine + "</p>" +
+      fields +
       (facts.length ? "<div class='you-facts'>" + facts.join("") + "</div>" : "") +
       missing;
   }
