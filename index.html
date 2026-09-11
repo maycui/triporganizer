@@ -568,13 +568,13 @@
   var TRAVEL_INFO = {
     "May":        { driving:"No",              flyIn:"No",       flyOut:"No", note:"Riding with Kevin Kuo's carpool from Burbank." },
     "Kevin Kuo":  { driving:"Yes",              flyIn:"No",       flyOut:"No", note:"Driving from Burbank &mdash; picking up Grayson &amp; Ayesha at PSP." },
-    "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
-    "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"6:51am", date:"9/18" },
-    "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:55am", date:"9/18", note:"Driving the rental &mdash; Car 2 with Haijia, David, Willie &amp; Jerry." },
+    "Haijia":     { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"LAX", time:"same flight", date:"9/18", note:"Landing at LAX with Kevin Koh &amp; Willie &mdash; Car 2." },
+    "David":      { driving:"Yes",              flyIn:"Kind of",  flyOut:"Kind of", airport:"PSP", note:"Picked up from PSP &mdash; Car 2." },
+    "Kevin Koh":  { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"same flight", date:"9/18", note:"Driving the rental &mdash; Car 2 with Haijia, David, Willie &amp; Jerry." },
     "Anna":       { driving:"Yes, if I have to", flyIn:"Yes",     flyOut:"No (heading to San Diego)", airport:"LAX", time:"6:30am", date:"9/18" },
     "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
-    "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:30am", date:"9/18" },
-    "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17" },
+    "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"same flight", date:"9/18", note:"Landing at LAX with Kevin Koh &amp; Haijia &mdash; Car 2." },
+    "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17", note:"Picked up in the LA area &mdash; Car 2." },
     "Ayesha":     { airport:"PSP", time:"9:00pm", date:"9/18", note:"Picked up by Kevin Kuo's carpool." },
     "Jeanie":     {},
     "Chelsea":    {},
@@ -597,7 +597,11 @@
       driver:"Kevin Koh",
       car:"Rental",
       passengers:["Haijia","David","Willie","Jerry"],
-      plan:[]
+      plan:[
+        "Haijia, Willie, and Kevin land at LAX on the same flight.",
+        "Jerry is picked up in the LA area.",
+        "David is picked up from Palm Springs Airport on the way to the Airbnb."
+      ]
     }
   ];
 
