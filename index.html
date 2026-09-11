@@ -274,6 +274,13 @@
   .room-top h4{margin:0; font-family:"Bricolage Grotesque"; font-size:1.05rem;}
   .room-cap{font-family:"Space Mono", monospace; font-size:.72rem; color:var(--text-muted); white-space:nowrap;}
   .room-desc{font-size:.82rem; color:var(--text-muted); margin-top:2px;}
+  .room-note-inline{
+    font-size:.78rem;
+    color:var(--accent-ink);
+    margin-top:8px;
+    border-left:2px solid var(--accent-2);
+    padding-left:8px;
+  }
   .occupants{
     display:flex; flex-wrap:wrap; gap:6px;
     margin-top:10px; min-height:26px;
@@ -404,7 +411,7 @@
 
       <div class="eyebrow">Remote work retreat</div>
       <h1>Joshua Tree</h1>
-      <p class="hero-meta"><span>Sept 18&ndash;24, 2026</span><span>12 guests</span></p>
+      <p class="hero-meta"><span>Sept 18&ndash;24, 2026</span><span>13 guests</span></p>
     </section>
 
     <section id="you">
@@ -426,13 +433,12 @@
     </section>
 
     <section id="rooms">
-      <div class="section-head"><h2>Rooms &amp; roommates</h2><span class="tag">tap to claim</span></div>
-      <p class="lede">Six sleeping setups, twelve people. Pick your name up top, then tap a room to claim your spot &mdash; updates live for everyone.</p>
+      <div class="section-head"><h2>Rooms &amp; roommates</h2><span class="tag">who's where</span></div>
+      <p class="lede">Here's who's in which room. Pick your name up top if anything about your spot changes &mdash; updates live for everyone.</p>
 
       <div class="rooms" id="roomsGrid"></div>
 
       <div class="unclaimed" id="unclaimedNote"></div>
-      <p class="room-note">Suite 2's second bed and the King Room are still up for grabs between the two Kevins &mdash; whoever claims first!</p>
     </section>
 
     <section id="travel">
@@ -470,11 +476,11 @@
 
 <script>
 (function(){
-  var ROSTER = ["Haijia","David","May","Kevin Kuo","Kevin Koh","Anna","Grayson","Willie","Richard","Jerry","Ayesha","Jeanie"];
+  var ROSTER = ["Haijia","David","Chelsea","May","Kevin Kuo","Kevin Koh","Anna","Jeanie","Jason","Jerry","Willie","Ayesha","Grayson"];
   var ROOMS = [
-    {id:"suite-1", label:"Suite 1", desc:"1 king, private bath", cap:2},
+    {id:"suite-1", label:"Suite 1", desc:"1 king, private bath", cap:3, note:"David flies out Sep 20 &mdash; Chelsea takes over the room that night."},
     {id:"suite-2", label:"Suite 2", desc:"1 queen, private bath", cap:2},
-    {id:"king", label:"King Room", desc:"1 king bed", cap:2},
+    {id:"king", label:"King Room", desc:"1 king bed", cap:1},
     {id:"two-full", label:"Two Full Beds", desc:"2 full beds", cap:4},
     {id:"bunk", label:"Bunk Room", desc:"4 beds", cap:4},
     {id:"sofa", label:"Sleeper Sofa", desc:"living room pull-out", cap:2},
@@ -495,9 +501,10 @@
     "Grayson":    { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"8:53am", date:"9/18" },
     "Willie":     { driving:"Yes",              flyIn:"Yes",      flyOut:"Yes",      airport:"LAX", time:"6:30am", date:"9/18" },
     "Jerry":      { driving:"Yes",              flyIn:"Not sure", flyOut:"Not sure", airport:"LAX", time:"evening", date:"9/17" },
-    "Richard":    {},
     "Ayesha":     {},
-    "Jeanie":     {}
+    "Jeanie":     {},
+    "Chelsea":    {},
+    "Jason":      {}
   };
 
   function slug(name){ return name.toLowerCase().replace(/\s+/g,"-"); }
@@ -585,6 +592,13 @@
       desc.className = "room-desc";
       desc.textContent = room.desc;
       card.appendChild(desc);
+
+      if (room.note) {
+        var noteDiv = document.createElement("div");
+        noteDiv.className = "room-note-inline";
+        noteDiv.innerHTML = room.note;
+        card.appendChild(noteDiv);
+      }
 
       var occDiv = document.createElement("div");
       occDiv.className = "occupants";
