@@ -296,27 +296,59 @@
     padding:3px 10px;
   }
   /* meals */
-  .meal-table{
-    border-collapse:collapse;
-    width:100%;
-    min-width:320px;
-    font-size:.88rem;
+  .calendar{
+    display:grid;
+    gap:8px;
+    margin-top:14px;
   }
-  .meal-table th, .meal-table td{
-    text-align:left;
-    padding:8px 12px;
-    border-bottom:1px solid var(--line);
+  .day-card{
+    display:grid;
+    grid-template-columns:52px 1fr;
+    gap:12px;
+    align-items:center;
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    padding:10px 14px;
   }
-  .meal-table th{
+  .day-date{
     font-family:"Space Mono", monospace;
     font-size:.68rem;
-    text-transform:uppercase;
     letter-spacing:.06em;
     color:var(--text-muted);
-    font-weight:400;
+    line-height:1.5;
   }
-  .meal-table td.mono{font-variant-numeric:tabular-nums;}
-  .meal-table-note{color:var(--text-muted); font-size:.78rem;}
+  .day-date b{
+    display:block;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size:1rem;
+    font-weight:700;
+    color:var(--text);
+    letter-spacing:0;
+  }
+  .day-meals{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .meal-pill{
+    font-size:.72rem;
+    padding:4px 10px;
+    border-radius:100px;
+    border:1px solid var(--line);
+    background:var(--surface-2);
+    white-space:nowrap;
+  }
+  .meal-pill.dash{
+    color:var(--text-muted);
+    border-style:dashed;
+    background:transparent;
+  }
+  .meal-pill.highlight{
+    border-color:var(--accent);
+    color:var(--accent-ink);
+    background:transparent;
+  }
 
   /* activities */
   .stops{
@@ -567,20 +599,16 @@
 
     <section id="meals">
       <div class="section-head"><h2>Meals</h2><span class="tag">mostly TBD</span></div>
-      <p class="lede">9/18 dinner is on your own. From 9/19&ndash;9/23 the group's got breakfast, lunch, and dinner &mdash; two of those lunches and two of those dinners we're eating out. 9/24 is breakfast only, off whatever groceries are left.</p>
-
-      <div style="overflow-x:auto; margin-top:14px;">
-        <table class="meal-table">
-          <thead>
-            <tr><th></th><th>Total</th><th>Eating out</th><th>Cooking</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Breakfast</td><td class="mono">6</td><td class="mono">0</td><td class="mono">5<span class="meal-table-note"> + leftovers 9/24</span></td></tr>
-            <tr><td>Lunch</td><td class="mono">5</td><td class="mono">2</td><td class="mono">3</td></tr>
-            <tr><td>Dinner</td><td class="mono">5</td><td class="mono">2</td><td class="mono">3</td></tr>
-          </tbody>
-        </table>
+      <div class="calendar">
+        <div class="day-card"><div class="day-date">FRI<b>9/18</b></div><div class="day-meals"><span class="meal-pill dash">B</span><span class="meal-pill dash">L</span><span class="meal-pill highlight">D &middot; on you</span></div></div>
+        <div class="day-card"><div class="day-date">SAT<b>9/19</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; group</span><span class="meal-pill">D &middot; group</span></div></div>
+        <div class="day-card"><div class="day-date">SUN<b>9/20</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; group</span><span class="meal-pill">D &middot; group</span></div></div>
+        <div class="day-card"><div class="day-date">MON<b>9/21</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; group</span><span class="meal-pill">D &middot; group</span></div></div>
+        <div class="day-card"><div class="day-date">TUE<b>9/22</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; group</span><span class="meal-pill">D &middot; group</span></div></div>
+        <div class="day-card"><div class="day-date">WED<b>9/23</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; group</span><span class="meal-pill">D &middot; group</span></div></div>
+        <div class="day-card"><div class="day-date">THU<b>9/24</b></div><div class="day-meals"><span class="meal-pill highlight">B &middot; leftovers</span><span class="meal-pill dash">L</span><span class="meal-pill dash">D</span></div></div>
       </div>
+      <p class="room-note" style="margin-top:12px;">Of the 10 group lunches &amp; dinners (9/19&ndash;9/23), 2 lunches and 2 dinners will be eating out &mdash; which days is still TBD.</p>
 
       <div class="rooms" style="margin-top:18px;">
         <div class="room">
