@@ -247,7 +247,6 @@
     padding:14px 16px;
   }
   .you-panel h3{font-size:1rem; margin-bottom:2px;}
-  .you-panel .you-missing{font-size:.85rem; color:var(--text-muted); margin-top:8px;}
   .you-facts{
     display:flex; flex-wrap:wrap; gap:8px;
     margin-top:10px;
@@ -701,27 +700,9 @@
       "<div class='carpool-field'><span class='carpool-field-label'>Car &middot; Leaving</span>" + carOutValue + "</div>" +
       "</div>";
 
-    var info = TRAVEL_INFO[me] || {};
-    var facts = [];
-    if (info.driving) facts.push("<span class='you-fact'><b>Driving/rental car:</b> " + info.driving + "</span>");
-    if (info.flyIn) facts.push("<span class='you-fact'><b>Flying in direct:</b> " + info.flyIn + "</span>");
-    if (info.flyOut) facts.push("<span class='you-fact'><b>Flying out direct:</b> " + info.flyOut + "</span>");
-    if (info.airport && info.time && info.date) {
-      facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + ", " + info.time + " on " + info.date + "</span>");
-    } else if (info.airport) {
-      facts.push("<span class='you-fact'><b>Arriving:</b> " + info.airport + "</span>");
-    }
-
-    var missing = (facts.length === 0 && !myRoomId)
-      ? "<p class='you-missing'>Nothing on file for you yet in the trip spreadsheet &mdash; " +
-        "<a href='https://docs.google.com/spreadsheets/d/1dCvGx05uWvQX2XkJUJj27wnsPzfpBKVYNx4sBRJyC1A/edit?gid=0#gid=0' target='_blank' rel='noopener'>add your answers there</a>.</p>"
-      : "<p class='you-missing'>From the trip spreadsheet &mdash; double-check there if anything's changed.</p>";
-
     youPanel.innerHTML =
       "<h3>Hey " + me + "</h3>" +
-      fields +
-      (facts.length ? "<div class='you-facts'>" + facts.join("") + "</div>" : "") +
-      missing;
+      fields;
   }
 
   ROSTER.forEach(function(name){
