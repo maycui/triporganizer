@@ -19,6 +19,8 @@
     --accent-2:#5F7052;
     --line:#D9CEB8;
     --shadow: 0 1px 0 rgba(44,38,32,.06);
+    --warn:#A8391C;
+    --warn-bg:#F7E1D4;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -32,6 +34,8 @@
       --accent-2:#93AC80;
       --line:#38304C;
       --shadow: 0 1px 0 rgba(0,0,0,.3);
+      --warn:#F0916A;
+      --warn-bg:#3B2114;
     }
   }
   :root[data-theme="dark"]{
@@ -45,6 +49,8 @@
     --accent-2:#93AC80;
     --line:#38304C;
     --shadow: 0 1px 0 rgba(0,0,0,.3);
+    --warn:#F0916A;
+    --warn-bg:#3B2114;
   }
 
   *{box-sizing:border-box;}
@@ -210,6 +216,38 @@
     margin:12px 0 0;
   }
   .stay-links{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  .warn-box{
+    border:2px solid var(--warn);
+    background:var(--warn-bg);
+    border-radius:4px;
+    padding:16px;
+    margin-top:16px;
+  }
+  .warn-label{
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--warn);
+    margin-bottom:10px;
+  }
+  .warn-item{
+    font-size:.9rem;
+    color:var(--text);
+    margin-top:8px;
+    line-height:1.5;
+  }
+  .warn-item:first-of-type{margin-top:0;}
+  .warn-item b{color:var(--warn);}
+  .warn-fine{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed var(--warn);
+    font-size:.88rem;
+    color:var(--text);
+  }
+  .warn-fine b{color:var(--warn);}
   .room-note{
     font-size:.85rem; color:var(--text-muted);
     margin-top:14px;
@@ -619,6 +657,13 @@
           <a class="btn" href="https://www.airbnb.com/rooms/1665383794764971406" target="_blank" rel="noopener">Open the Airbnb listing</a>
           <a class="btn ghost" href="https://maps.google.com/?q=60277+Pueblo+Trail,+Joshua+Tree,+CA+92252" target="_blank" rel="noopener">Open in Maps</a>
         </div>
+      </div>
+
+      <div class="warn-box">
+        <div class="warn-label">Caution &mdash; House Rules</div>
+        <div class="warn-item"><b>Quiet hours: 10:00pm&ndash;8:00am.</b> No amplified music, noisy gatherings, or loud activity during those hours. Sound carries far in the desert, so mind outdoor noise too.</div>
+        <div class="warn-item"><b>Parking:</b> all vehicles must stay on the driveway and off the street.</div>
+        <div class="warn-fine">Either one can mean a fine of <b>$1,000&ndash;$5,000</b>.</div>
       </div>
     </section>
 
