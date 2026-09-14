@@ -334,8 +334,24 @@
     display:grid;
     gap:8px;
     margin-top:14px;
-    margin-bottom:22px;
   }
+  .calendar-key{
+    display:flex;
+    gap:16px;
+    margin-top:10px;
+    margin-bottom:22px;
+    font-size:.76rem;
+    color:var(--text-muted);
+  }
+  .calendar-key span{display:inline-flex; align-items:center; gap:6px;}
+  .key-swatch{
+    width:11px;
+    height:11px;
+    border-radius:3px;
+    display:inline-block;
+  }
+  .key-swatch.out{border:1px solid var(--accent); background:transparent;}
+  .key-swatch.home{border:1px solid var(--line); background:var(--surface-2);}
   .day-card{
     display:grid;
     grid-template-columns:52px 1fr;
@@ -635,13 +651,17 @@
     <section id="meals">
       <div class="section-head"><h2>Meals</h2><span class="tag">mostly TBD</span></div>
       <div class="calendar">
-        <div class="day-card"><div class="day-date">FRI<b>9/18</b></div><div class="day-meals"><span class="meal-pill dash">B</span><span class="meal-pill dash">L</span><span class="meal-pill highlight">D &middot; on you</span></div></div>
-        <div class="day-card"><div class="day-date">SAT<b>9/19</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill highlight">L &middot; Tacos Los Oaxacos</span><span class="meal-pill">D &middot; cooking</span></div></div>
-        <div class="day-card"><div class="day-date">SUN<b>9/20</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill highlight">L &middot; Pappy &amp; Harriet's</span><span class="meal-pill">D &middot; cooking</span></div></div>
-        <div class="day-card"><div class="day-date">MON<b>9/21</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; cooking</span><span class="meal-pill">D &middot; cooking</span></div></div>
-        <div class="day-card"><div class="day-date">TUE<b>9/22</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill highlight">L &middot; Sky High Pie</span><span class="meal-pill">D &middot; cooking</span></div></div>
-        <div class="day-card"><div class="day-date">WED<b>9/23</b></div><div class="day-meals"><span class="meal-pill">B &middot; cooking</span><span class="meal-pill">L &middot; cooking</span><span class="meal-pill highlight">D &middot; eating out</span></div></div>
-        <div class="day-card"><div class="day-date">THU<b>9/24</b></div><div class="day-meals"><span class="meal-pill highlight">B &middot; leftovers</span><span class="meal-pill dash">L</span><span class="meal-pill dash">D</span></div></div>
+        <div class="day-card"><div class="day-date">FRI<b>9/18</b></div><div class="day-meals"><span class="meal-pill dash">B</span><span class="meal-pill dash">L</span><span class="meal-pill">D &middot; on you</span></div></div>
+        <div class="day-card"><div class="day-date">SAT<b>9/19</b></div><div class="day-meals"><span class="meal-pill">B &middot; Breakfast</span><span class="meal-pill highlight">L &middot; Tacos Los Oaxacos</span><span class="meal-pill">D &middot; Cajun night</span></div></div>
+        <div class="day-card"><div class="day-date">SUN<b>9/20</b></div><div class="day-meals"><span class="meal-pill">B &middot; Breakfast</span><span class="meal-pill highlight">L &middot; Pappy &amp; Harriet's</span><span class="meal-pill">D &middot; Pasta</span></div></div>
+        <div class="day-card"><div class="day-date">MON<b>9/21</b></div><div class="day-meals"><span class="meal-pill">B &middot; Breakfast</span><span class="meal-pill">L &middot; Indomie</span><span class="meal-pill">D &middot; Burgers &amp; hot dogs</span></div></div>
+        <div class="day-card"><div class="day-date">TUE<b>9/22</b></div><div class="day-meals"><span class="meal-pill">B &middot; Breakfast</span><span class="meal-pill highlight">L &middot; Sky High Pie</span><span class="meal-pill">D &middot; Mapo tofu &amp; broccoli</span></div></div>
+        <div class="day-card"><div class="day-date">WED<b>9/23</b></div><div class="day-meals"><span class="meal-pill">B &middot; Breakfast</span><span class="meal-pill">L &middot; Japanese curry</span><span class="meal-pill highlight">D &middot; eating out</span></div></div>
+        <div class="day-card"><div class="day-date">THU<b>9/24</b></div><div class="day-meals"><span class="meal-pill">B &middot; leftovers</span><span class="meal-pill dash">L</span><span class="meal-pill dash">D</span></div></div>
+      </div>
+      <div class="calendar-key">
+        <span><i class="key-swatch out"></i>Eating out</span>
+        <span><i class="key-swatch home"></i>Home meal</span>
       </div>
 
       <h3 class="subhead">Eating out</h3>
@@ -685,7 +705,11 @@
           <div class="room-desc" style="margin-top:8px;">With tomato &amp; burrata salad, plus a spring salad.</div>
           <div class="room-desc">Chef: TBD</div>
         </div>
-        <div class="room"><div class="room-top"><h4>TBD</h4></div><div class="room-subtitle">Mon 9/21 &middot; Lunch</div></div>
+        <div class="room">
+          <div class="room-top"><h4>Indomie</h4></div>
+          <div class="room-subtitle">Mon 9/21 &middot; Lunch</div>
+          <div class="room-desc" style="margin-top:8px;">Chef: TBD</div>
+        </div>
         <div class="room">
           <div class="room-top"><h4>Burgers &amp; hot dogs</h4></div>
           <div class="room-subtitle">Mon 9/21 &middot; Dinner</div>
