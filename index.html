@@ -442,50 +442,79 @@
   /* itinerary */
   .itin-list{
     display:grid;
-    gap:12px;
+    gap:14px;
     margin-top:18px;
   }
   .itin-day{
     border:1px solid var(--line);
     background:var(--surface);
     border-radius:4px;
-    padding:14px 16px;
+    padding:16px 18px;
   }
   .itin-date{
-    font-family:"Space Mono", monospace;
-    font-size:.72rem;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    color:var(--accent-ink);
-    margin-bottom:10px;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    color:var(--text);
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--text);
   }
   .itin-steps{
     list-style:none;
     margin:0;
     padding:0;
-    display:grid;
-    gap:0;
   }
   .itin-steps li{
     display:grid;
-    grid-template-columns:86px 1fr;
-    gap:2px 14px;
-    align-items:start;
-    font-size:.88rem;
-    color:var(--text);
-    line-height:1.4;
-    padding-block:10px;
-    border-top:1px dashed var(--line);
+    grid-template-columns:70px 1fr;
+    column-gap:12px;
   }
-  .itin-steps li:first-child{padding-top:0; border-top:none;}
-  .itin-steps li:last-child{padding-bottom:0;}
   .itin-steps li b{
     font-family:"Space Mono", monospace;
-    font-size:.72rem;
+    font-size:.7rem;
     font-weight:700;
     letter-spacing:.02em;
     color:var(--accent-ink);
-    line-height:1.35;
+    line-height:1.4;
+    text-align:right;
+    padding-top:13px;
+  }
+  .itin-steps li:first-child b{padding-top:1px;}
+  .itin-steps li span{
+    position:relative;
+    display:block;
+    padding:12px 0 12px 18px;
+    border-left:2px solid var(--line);
+    font-size:.88rem;
+    color:var(--text);
+    line-height:1.5;
+  }
+  .itin-steps li:first-child span{padding-top:0;}
+  .itin-steps li:last-child span{padding-bottom:0; border-left-color:transparent;}
+  .itin-steps li span::before{
+    content:"";
+    position:absolute;
+    left:-6px;
+    top:13px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--accent);
+    border:2px solid var(--surface);
+  }
+  .itin-steps li:first-child span::before{top:1px;}
+  .itin-optional{
+    font-family:"Space Mono", monospace;
+    font-size:.64rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--accent-ink);
+    border:1px solid var(--accent-ink);
+    border-radius:100px;
+    padding:1px 7px;
+    margin-right:6px;
+    display:inline-block;
   }
 
   /* activities */
@@ -786,8 +815,8 @@
       <div style="display:flex; align-items:stretch; gap:10px; margin-bottom:14px;">
         <div class="vert-label">Responsibilities</div>
         <div class="plaque" style="flex:1; min-width:0; padding:4px 16px; background:transparent; border-style:dashed;">
-          <div class="cook-role"><b>Chef</b><span>Grocery list for the meal, assigning tasks at cook time</span></div>
-          <div class="cook-role"><b>Everyone</b><span>Pitch in on prepping, setting the table, washing dishes</span></div>
+          <div class="cook-role"><b>Chef</b><span>Grocery list for the meal, leading the effort and assigning tasks at cook time</span></div>
+          <div class="cook-role"><b>Everyone</b><span>Pitch in on prepping, cooking, setting the table, washing dishes</span></div>
         </div>
       </div>
       <div class="rooms">
@@ -865,40 +894,40 @@
         <div class="itin-day">
           <div class="itin-date">Sat 9/19</div>
           <ul class="itin-steps">
-            <li><b>10:00 AM&ndash;12:00 PM</b>Hike &mdash; Hidden Valley Nature Trail (easiest of the bunch)</li>
-            <li><b>1:30 PM</b>Lunch &mdash; Tacos Los Oaxacos</li>
-            <li><b>2:30&ndash;5:30 PM</b>Hang out at the house</li>
-            <li><b>6:30 PM</b>Dinner &mdash; Cajun night</li>
-            <li><b>9:00 PM</b>Stargazing</li>
+            <li><b>10:00 AM&ndash;12:00 PM</b><span>Hike &mdash; Hidden Valley Nature Trail (easiest of the bunch)</span></li>
+            <li><b>1:30 PM</b><span>Lunch &mdash; Tacos Los Oaxacos</span></li>
+            <li><b>2:30&ndash;5:30 PM</b><span>Hang out at the house</span></li>
+            <li><b>6:30 PM</b><span>Dinner &mdash; Cajun night</span></li>
+            <li><b>9:00 PM</b><span>Stargazing</span></li>
           </ul>
         </div>
         <div class="itin-day">
           <div class="itin-date">Sun 9/20</div>
           <ul class="itin-steps">
-            <li><b>Morning</b>TBD</li>
-            <li><b>12:00 PM</b>Lunch &mdash; BBQ at Pappy &amp; Harriet's</li>
-            <li><b>1:30&ndash;4:30 PM</b>Food coma</li>
-            <li><b>5:45&ndash;7:00 PM</b>Cholla Cactus Garden at sunset (~6:45 PM)</li>
-            <li><b>7:30 PM</b>Dinner &mdash; pasta &amp; salad, hang out at the house</li>
-            <li><b>9:30 PM</b>Stargazing</li>
+            <li><b>Morning</b><span>TBD</span></li>
+            <li><b>12:00 PM</b><span>Lunch &mdash; BBQ at Pappy &amp; Harriet's</span></li>
+            <li><b>1:30&ndash;4:30 PM</b><span>Food coma</span></li>
+            <li><b>5:45&ndash;7:00 PM</b><span>Cholla Cactus Garden at sunset (~6:45 PM)</span></li>
+            <li><b>7:30 PM</b><span>Dinner &mdash; pasta &amp; salad, hang out at the house</span></li>
+            <li><b>9:30 PM</b><span>Stargazing</span></li>
           </ul>
         </div>
         <div class="itin-day">
           <div class="itin-date">Mon&ndash;Wed 9/21&ndash;9/23</div>
           <ul class="itin-steps">
-            <li><b>7:00&ndash;9:00 AM, optional</b>Early hike for early risers &mdash; Barker Dam Loop, Skull Rock Trail, or Arch Rock Trail (see below)</li>
-            <li><b>9:00 AM&ndash;5:00 PM</b>Working hours</li>
-            <li><b>6:30 PM</b>Dinner (see Meals)</li>
-            <li><b>9:00 PM</b>Stargazing</li>
+            <li><b>7:00&ndash;9:00 AM</b><span><span class="itin-optional">Optional</span> early hike for early risers &mdash; Barker Dam Loop, Skull Rock Trail, or Arch Rock Trail (see below)</span></li>
+            <li><b>9:00 AM&ndash;5:00 PM</b><span>Working hours</span></li>
+            <li><b>6:30 PM</b><span>Dinner (see Meals)</span></li>
+            <li><b>9:00 PM</b><span>Stargazing</span></li>
           </ul>
         </div>
         <div class="itin-day">
           <div class="itin-date">Thu 9/24</div>
           <ul class="itin-steps">
-            <li><b>8:00 AM</b>Breakfast &mdash; leftovers</li>
-            <li><b>10:00 AM</b>Checkout</li>
-            <li><b>~12:00 PM</b>Grab lunch by car &mdash; each carpool group on their own</li>
-            <li><b>Afternoon</b>Drive to airports &mdash; see Cars for flight times</li>
+            <li><b>8:00 AM</b><span>Breakfast &mdash; leftovers</span></li>
+            <li><b>10:00 AM</b><span>Checkout</span></li>
+            <li><b>~12:00 PM</b><span>Grab lunch by car &mdash; each carpool group on their own</span></li>
+            <li><b>Afternoon</b><span>Drive to airports &mdash; see Cars for flight times</span></li>
           </ul>
         </div>
       </div>
