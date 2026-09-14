@@ -621,6 +621,14 @@
     color:var(--text-muted);
   }
   .travel-row.no-data .travel-note{font-style:italic;}
+  .travel-row.missing{
+    border-color:var(--warn);
+    background:var(--warn-bg);
+  }
+  .travel-row.missing .travel-note{
+    color:var(--warn);
+    font-weight:600;
+  }
 
   footer{
     margin-top:52px;
@@ -1253,9 +1261,10 @@
       } else {
         var noteEl = document.createElement("span");
         noteEl.className = "travel-note";
-        noteEl.textContent = (info.flyIn === "No") ? "Driving in — no flight" : "No flight info yet";
+        var flyInNo = info.flyIn === "No";
+        noteEl.textContent = flyInNo ? "Driving in — no flight" : "No flight info yet";
         row.appendChild(noteEl);
-        row.className += " no-data";
+        row.className += flyInNo ? " no-data" : " no-data missing";
       }
 
       inboundList.appendChild(row);
@@ -1287,7 +1296,7 @@
         var flyOutNo = info.flyOut && info.flyOut.toLowerCase().indexOf("no") === 0;
         noteEl.textContent = flyOutNo ? "Driving out — no flight" : "No flight info yet";
         row.appendChild(noteEl);
-        row.className += " no-data";
+        row.className += flyOutNo ? " no-data" : " no-data missing";
       }
 
       outboundList.appendChild(row);
