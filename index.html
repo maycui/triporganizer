@@ -316,6 +316,20 @@
   .cook-role:last-child{border-bottom:none;}
   .cook-role b{font-family:"Bricolage Grotesque", sans-serif; font-size:.92rem;}
   .cook-role span{font-size:.82rem; color:var(--text-muted);}
+  .vert-label{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    font-family:"Space Mono", monospace;
+    font-size:.68rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    flex:none;
+  }
   .calendar{
     display:grid;
     gap:8px;
@@ -651,9 +665,12 @@
       <p class="room-note" style="margin-top:10px;">1 more meal out still TBD &mdash; Wed 9/23 dinner.</p>
 
       <h3 class="subhead">Cooking</h3>
-      <div class="plaque" style="margin-bottom:14px; padding:4px 16px; background:transparent; border-style:dashed;">
-        <div class="cook-role"><b>Chef</b><span>Grocery list for the meal, assigning tasks at cook time</span></div>
-        <div class="cook-role"><b>Everyone</b><span>Pitch in on prepping, setting the table, washing dishes</span></div>
+      <div style="display:flex; align-items:stretch; gap:10px; margin-bottom:14px;">
+        <div class="vert-label">Responsibilities</div>
+        <div class="plaque" style="flex:1; min-width:0; padding:4px 16px; background:transparent; border-style:dashed;">
+          <div class="cook-role"><b>Chef</b><span>Grocery list for the meal, assigning tasks at cook time</span></div>
+          <div class="cook-role"><b>Everyone</b><span>Pitch in on prepping, setting the table, washing dishes</span></div>
+        </div>
       </div>
       <div class="rooms">
         <div class="room">
