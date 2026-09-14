@@ -464,22 +464,28 @@
     margin:0;
     padding:0;
     display:grid;
-    gap:8px;
+    gap:0;
   }
   .itin-steps li{
-    font-size:.9rem;
-    padding-top:8px;
+    display:grid;
+    grid-template-columns:86px 1fr;
+    gap:2px 14px;
+    align-items:start;
+    font-size:.88rem;
+    color:var(--text);
+    line-height:1.4;
+    padding-block:10px;
     border-top:1px dashed var(--line);
   }
   .itin-steps li:first-child{padding-top:0; border-top:none;}
+  .itin-steps li:last-child{padding-bottom:0;}
   .itin-steps li b{
     font-family:"Space Mono", monospace;
-    font-size:.68rem;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:var(--text-muted);
-    display:block;
-    margin-bottom:2px;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.02em;
+    color:var(--accent-ink);
+    line-height:1.35;
   }
 
   /* activities */
