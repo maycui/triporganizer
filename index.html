@@ -306,6 +306,16 @@
     padding:3px 10px;
   }
   /* meals */
+  .cook-role{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .cook-role:last-child{border-bottom:none;}
+  .cook-role b{font-family:"Bricolage Grotesque", sans-serif; font-size:.92rem;}
+  .cook-role span{font-size:.82rem; color:var(--text-muted);}
   .calendar{
     display:grid;
     gap:8px;
@@ -641,9 +651,9 @@
       <p class="room-note" style="margin-top:10px;">1 more meal out still TBD &mdash; Wed 9/23 dinner.</p>
 
       <h3 class="subhead">Cooking</h3>
-      <div class="you-facts" style="margin-bottom:14px;">
-        <span class="you-fact"><b>Chef:</b> grocery list for the meal, assigning tasks at cook time</span>
-        <span class="you-fact"><b>Everyone:</b> pitch in on prepping, setting the table, washing dishes</span>
+      <div class="plaque" style="margin-bottom:14px; padding:4px 16px;">
+        <div class="cook-role"><b>Chef</b><span>Grocery list for the meal, assigning tasks at cook time</span></div>
+        <div class="cook-role"><b>Everyone</b><span>Pitch in on prepping, setting the table, washing dishes</span></div>
       </div>
       <div class="rooms">
         <div class="room">
